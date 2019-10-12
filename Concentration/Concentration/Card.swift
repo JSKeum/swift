@@ -8,15 +8,24 @@
 
 import Foundation
 
-struct Card {
+struct Card //: Hashable 
+    // hashable 질문.. 어찌합니까 ...
+{
+//    var hashValue: Int { return identifier }
+//    func hash(into hasher: inout Hasher) {
+//        var hashValue: Int { return identifier }
+    
+//    static func ==(lhs: Card, rhs: Card) -> Bool {
+//        return lhs.identifier == rhs.identifer
+//    }
     
     var isFaceUp = false
     var isMatched = false
     var identifier: Int
     
-    static var identifierFactory = 0
+    private static var identifierFactory = 0
     
-    static func getUniqueIdentifier() -> Int{
+    private static func getUniqueIdentifier() -> Int{
         identifierFactory += 1
         return identifierFactory
     }
