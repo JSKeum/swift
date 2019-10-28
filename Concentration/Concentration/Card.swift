@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct Card //: Hashable 
-    // hashable 질문.. 어찌합니까 ...
+struct Card : Hashable
+    // hashable 질문..
 {
 //    var hashValue: Int { return identifier }
 //    func hash(into hasher: inout Hasher) {
 //        var hashValue: Int { return identifier }
-    
+//
 //    static func ==(lhs: Card, rhs: Card) -> Bool {
 //        return lhs.identifier == rhs.identifer
 //    }

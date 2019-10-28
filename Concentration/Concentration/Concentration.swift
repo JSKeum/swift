@@ -67,6 +67,7 @@ struct Concentration {
     
     init(numbersOfPairsOfCards: Int) {
         assert(numbersOfPairsOfCards > 0, "numbersOfPairsofCards must be at least 1")
+        
         for _ in 0..<numbersOfPairsOfCards {
             let card = Card()
             cards += [card, card]
