@@ -22,6 +22,14 @@ class ConcentrationViewController: UIViewController {
         }
     }
     
+    @IBOutlet private weak var flipCardCount: UILabel! {
+        didSet {
+            updateFlipCard()
+        }
+    }
+    @IBOutlet private var cardButtons: [UIButton]!
+    //@IBOutlet private var cardButtons: [UIView]!
+    
     private func updateFlipCard() {
         let attributes: [NSAttributedString.Key:Any] = [
             .strokeWidth : 7.0,
@@ -34,18 +42,15 @@ class ConcentrationViewController: UIViewController {
     
     var beforeButton: Int = -1
     
-    @IBOutlet private weak var flipCardCount: UILabel! {
-        didSet {
-            updateFlipCard()
-        }
-    }
-    @IBOutlet private var cardButtons: [UIButton]!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
     
+    
+   
     @IBAction func touchCard(_ sender: UIButton) {
         
         flipCard += 1
@@ -58,6 +63,10 @@ class ConcentrationViewController: UIViewController {
             beforeButton = cardNumber
             
             game.chooseCard(at: cardNumber)
+            
+            
+                    
+            
             print(String((cardNumber + 1)) + "번 카드를 뒤집었어요")
             
             updateViewFromModel()
@@ -80,35 +89,21 @@ class ConcentrationViewController: UIViewController {
         }
         print("\(notMatched/2)쌍의 카드가 남아있어요 \n")
         if notMatched == 0 {
-            finishAlert()
+            finishedAlert(title : "게임을 종료합니다", message: "\(flipCard)번 뒤집고 모두 맞추셨네요!")
         } else if flipCard >= 20 {
-            failAlert()
+            finishedAlert(title: "게임을 종료합니다", message: "20번 했는데도 못했으니 실패입니다")
         }
     }
-/// Alerts
-    func failAlert() {
-        let message = "20번 했는데도 못했으니 실패입니다"
-        let title = "게임을 종료합니다"
-        
-        alert(title: title, message: message)
-        
-    }
     
-    func finishAlert() {
-        let message = "\(flipCard)번 뒤집고 모두 맞추셨네요!"
-        let title = "게임을 종료합니다"
-        
-        alert(title: title, message: message)
-    }
-    
-    func alert(title: String, message: String) {
+    func finishedAlert(title: String, message: String) {
+        let title = title
+        let message = message
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "다시시작", style: .default, handler: { action in self.startNewRound() })
         
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
-///
     
     func startNewRound() {
         game = Concentration(numbersOfPairsOfCards: numbersOfPairsOfCards)
@@ -130,8 +125,22 @@ class ConcentrationViewController: UIViewController {
                     button.setTitle("", for: UIControl.State.normal)
                     button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) :#colorLiteral(red: 0, green: 1, blue: 0, alpha: 1)
                 }
-            }
+                
+               button.addGestureRecognizer(UIGestureRecognizer(target: self, action: #selector(filpCard(_ :))))
+                }
+            
         }
+    }
+
+    @objc func filipCard(_ recognizer: UIGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            if let chosenCardView = recognizer.view as? UIButton {
+                UIView.animate(withDuration: <#T##TimeInterval#>, animations: <#T##() -> Void#>)
+            }
+        default: break
+        }
+
     }
     
     var theme = [String?]()
@@ -153,9 +162,7 @@ class ConcentrationViewController: UIViewController {
     
     private func emoji(for card: Card) -> String {
         if emoji[card] == nil, emojiChoices.count > 0 {
-            
-            
-            
+                      
             let randomIndex = emojiChoices.count.arc4random
             //print 때문에 위에 변수로 선언한 것!
             print(randomIndex)
